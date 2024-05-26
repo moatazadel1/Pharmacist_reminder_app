@@ -62,11 +62,11 @@ class _EditState extends State<Add> {
           );
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
-              return AllItems();
+              return const AllItems();
             }),
           );
           context.read<UserCubit>().getUserProfile();
-          
+
           //context.read<UserCubit>().expiredData();
         } else if (state is AddItemFailure) {
           ScaffoldMessenger.of(context)
@@ -500,69 +500,68 @@ class _EditState extends State<Add> {
                 Padding(
                   padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
                   child: state is AddItemLoading
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : CustomButton(
                           title: "Add",
                           onPressed: () {
                             context.read<UserCubit>().addItem();
-                            
                           },
                         ),
                 ),
               ],
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: (value) {
-              setState(() {
-                index = value;
-                if (index == 0) {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const HomePage();
-                  }));
-                } else if (index == 1) {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const Calender();
-                  }));
-                } else if (index == 2) {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const Add();
-                  }));
-                } else if (index == 3) {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const Settings();
-                  }));
-                }
-              });
-            },
-            currentIndex: 2,
-            unselectedFontSize: 15,
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: const Color(0xFF295c82),
-            selectedLabelStyle: const TextStyle(fontSize: 13),
-            items: [
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: "Home",
-                  backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_month),
-                  label: "Calender",
-                  backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.add),
-                  label: "Add",
-                  backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: "Settings",
-                  backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-            ],
-          ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   onTap: (value) {
+          //     setState(() {
+          //       index = value;
+          //       if (index == 0) {
+          //         Navigator.of(context)
+          //             .push(MaterialPageRoute(builder: (context) {
+          //           return const HomePage();
+          //         }));
+          //       } else if (index == 1) {
+          //         Navigator.of(context)
+          //             .push(MaterialPageRoute(builder: (context) {
+          //           return const Calender();
+          //         }));
+          //       } else if (index == 2) {
+          //         Navigator.of(context)
+          //             .push(MaterialPageRoute(builder: (context) {
+          //           return const Add();
+          //         }));
+          //       } else if (index == 3) {
+          //         Navigator.of(context)
+          //             .push(MaterialPageRoute(builder: (context) {
+          //           return const Settings();
+          //         }));
+          //       }
+          //     });
+          //   },
+          //   currentIndex: 2,
+          //   unselectedFontSize: 15,
+          //   unselectedItemColor: Colors.grey,
+          //   selectedItemColor: const Color(0xFF295c82),
+          //   selectedLabelStyle: const TextStyle(fontSize: 13),
+          //   items: [
+          //     const BottomNavigationBarItem(
+          //         icon: Icon(Icons.home),
+          //         label: "Home",
+          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
+          //     const BottomNavigationBarItem(
+          //         icon: Icon(Icons.calendar_month),
+          //         label: "Calender",
+          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
+          //     const BottomNavigationBarItem(
+          //         icon: Icon(Icons.add),
+          //         label: "Add",
+          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
+          //     const BottomNavigationBarItem(
+          //         icon: Icon(Icons.settings),
+          //         label: "Settings",
+          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
+          //   ],
+          // ),
         );
       },
     );

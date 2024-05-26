@@ -5,6 +5,7 @@ import 'package:reminder_app/components/searchfield.dart';
 import 'package:reminder_app/components/soonContainer.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
+import 'package:reminder_app/root_screen.dart';
 import 'package:reminder_app/screens/add_item.dart';
 import 'package:reminder_app/screens/calender.dart';
 import 'package:reminder_app/screens/homepage.dart';
@@ -19,12 +20,14 @@ class SoonToExpire extends StatefulWidget {
 
 class _SoonToExpireState extends State<SoonToExpire> {
   int index = 0;
+  @override
   void initState() {
     super.initState();
-    
+
     // Fetch all products when the widget is initialized
     context.read<UserCubit>().soonExpiredData();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
@@ -34,7 +37,7 @@ class _SoonToExpireState extends State<SoonToExpire> {
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-              backgroundColor: Color.fromARGB(255, 244, 243, 243),
+              backgroundColor: const Color.fromARGB(255, 244, 243, 243),
               title: const Text(
                 "SoonToExpired",
                 style: TextStyle(
@@ -43,32 +46,41 @@ class _SoonToExpireState extends State<SoonToExpire> {
                 ),
               ),
               centerTitle: true,
-              leading: BackButton(color: Color(0xFF295c82)),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Color(0xFF295c82)),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, RootScreen.id,
+                      arguments: BlocProvider.of<UserCubit>(context)
+                          .getUserProfile()); // Navigate back to the previous screen
+                },
+              ),
             ),
             body: state is SoonExpiredLoading
-              ? const CircularProgressIndicator()
-              : state is SoonExpiredSuccess
-                  ? CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: SearchField(),
-                      ),
-                    Column(
-                                children: state.soonexproducts.data.map((soonexproduct) {
-                                  return SoonExCustomContainer(
-                                    soonexproducts: soonexproduct,
-                                  );
-                                }).toList(),
-                              ),
-                    ],
-                  ),
-                )
-              ],
-            ):Container(),
+                ? const CircularProgressIndicator()
+                : state is SoonExpiredSuccess
+                    ? CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: SearchField(),
+                                ),
+                                Column(
+                                  children: state.soonexproducts.data
+                                      .map((soonexproduct) {
+                                    return SoonExCustomContainer(
+                                      soonexproducts: soonexproduct,
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(),
             bottomNavigationBar: BottomNavigationBar(
               onTap: (value) {
                 setState(() {
@@ -76,22 +88,22 @@ class _SoonToExpireState extends State<SoonToExpire> {
                   if (index == 0) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
-                      return HomePage();
+                      return const HomePage();
                     }));
                   } else if (index == 1) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
-                      return Calender();
+                      return const Calender();
                     }));
                   } else if (index == 2) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
-                      return Add();
+                      return const Add();
                     }));
                   } else if (index == 3) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
-                      return Settings();
+                      return const Settings();
                     }));
                   }
                 });
@@ -99,9 +111,9 @@ class _SoonToExpireState extends State<SoonToExpire> {
               currentIndex: 0,
               unselectedFontSize: 15,
               unselectedItemColor: Colors.grey,
-              selectedItemColor: Color(0xFF295c82),
-              selectedLabelStyle: TextStyle(fontSize: 13),
-              items: [
+              selectedItemColor: const Color(0xFF295c82),
+              selectedLabelStyle: const TextStyle(fontSize: 13),
+              items: const [
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: "Home",

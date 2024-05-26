@@ -5,6 +5,7 @@ import 'package:reminder_app/components/exContainer.dart';
 import 'package:reminder_app/components/searchfield.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
+import 'package:reminder_app/root_screen.dart';
 import 'package:reminder_app/screens/add_item.dart';
 import 'package:reminder_app/screens/calender.dart';
 import 'package:reminder_app/screens/homepage.dart';
@@ -19,18 +20,18 @@ class Expired extends StatefulWidget {
 
 class _ExpiredState extends State<Expired> {
   int index = 0;
+  @override
   void initState() {
     super.initState();
-    
+
     // Fetch all products when the widget is initialized
     context.read<UserCubit>().expiredData();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) {
-        
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
@@ -43,32 +44,41 @@ class _ExpiredState extends State<Expired> {
                 ),
               ),
               centerTitle: true,
-              leading: const BackButton(color: Color(0xFF295c82)),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Color(0xFF295c82)),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, RootScreen.id,
+                      arguments:
+                          BlocProvider.of<UserCubit>(context).getUserProfile());
+                },
+              ),
             ),
             body: state is ExpiredLoading
-              ? const CircularProgressIndicator()
-              : state is ExpiredSuccess
-                  ? CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: SearchField(),
-                      ),
-                    Column(
-                                children: state.exproducts.data.map((exproduct) {
-                                  return ExCustomContainer(
-                                    exproducts: exproduct,
-                                  );
-                                }).toList(),
-                              ),
-                    ],
-                  ),
-                )
-              ],
-            ):Container(),
+                ? const CircularProgressIndicator()
+                : state is ExpiredSuccess
+                    ? CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: SearchField(),
+                                ),
+                                Column(
+                                  children:
+                                      state.exproducts.data.map((exproduct) {
+                                    return ExCustomContainer(
+                                      exproducts: exproduct,
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(),
             bottomNavigationBar: BottomNavigationBar(
               onTap: (value) {
                 setState(() {
@@ -101,20 +111,20 @@ class _ExpiredState extends State<Expired> {
               unselectedItemColor: Colors.grey,
               selectedItemColor: const Color(0xFF295c82),
               selectedLabelStyle: const TextStyle(fontSize: 13),
-              items: [
-                const BottomNavigationBarItem(
+              items: const [
+                BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: "Home",
                     backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-                const BottomNavigationBarItem(
+                BottomNavigationBarItem(
                     icon: Icon(Icons.calendar_month),
                     label: "Calender",
                     backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-                const BottomNavigationBarItem(
+                BottomNavigationBarItem(
                     icon: Icon(Icons.add),
                     label: "Add",
                     backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-                const BottomNavigationBarItem(
+                BottomNavigationBarItem(
                     icon: Icon(Icons.settings),
                     label: "Settings",
                     backgroundColor: Color.fromARGB(255, 230, 230, 230)),

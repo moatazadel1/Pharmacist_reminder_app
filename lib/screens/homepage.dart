@@ -18,34 +18,100 @@ import 'package:reminder_app/widgets/noti_list_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static String id = 'homeScreen';
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-int index = 0;
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  // late PageController controller;
+  // int currentPage = 0;
+  // bool _isLoading = true;
+  // // List<Widget> destinations = [];
+  // List<Widget> widgets = [
+  //   const HomePage(),
+  //   const Calender(),
+  //   const Add(),
+  //   const Settings(),
+  // ];
 
-class _HomePageState extends State<HomePage> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller = PageController(initialPage: currentPage);
+  // }
+
+  // Future<void> fetchFCT() async {
+  //   try {
+  //     Future.wait({
+  //       context.read<UserCubit>().getUserProfile(),
+  //       context.read<UserCubit>().allData(),
+  //     });
+  //     // Future.wait({
+  //     //   cartProvider.fetchCart(),
+  //     //   wishlistProvider.fetchWishlist(),
+  //     //   ordersProvider.fetchOrder(),
+  //     // });
+  //   } catch (e) {
+  //     rethrow;
+  //   } finally {
+  //     _isLoading = false;
+  //   }
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   if (_isLoading) {
+  //     fetchFCT();
+  //   }
+  //   super.didChangeDependencies();
+  // }
+
+  // @override
+  // void initState() {
+  //   var allData = BlocProvider.of<UserCubit>(context).allData();
+  //   super.initState();
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // context.read<UserCubit>().getUserProfile();
+  //   // Re-fetch data when dependencies change
+  //   // await context.read<UserCubit>().getUserProfile();
+  //   try {
+  //     Future.wait({
+  // context.read<UserCubit>().getUserProfile(),
+  // context.read<UserCubit>().allData(),
+  //     });
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+    super.build(context);
+    return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Scaffold(
           body: state is GetUserLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : state is GetUserSuccess
                   ? SingleChildScrollView(
                       child: Column(
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return const PersonalProfile();
-                              }));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const PersonalProfile();
+                                  },
+                                ),
+                              );
                             },
                             child: Row(
                               children: [
@@ -121,10 +187,17 @@ class _HomePageState extends State<HomePage> {
                               trailing:
                                   const Icon(Icons.arrow_forward_ios, size: 25),
                               onTap: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return const AllItems();
-                                }));
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   AllItems.id,
+                                // );
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const AllItems();
+                                    },
+                                  ),
+                                );
                               },
                             ),
                           ),
@@ -233,65 +306,65 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                   : Container(),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: (value) {
-              setState(() {
-                index = value;
-                switch (index) {
-                  case 0:
-                    // No need to navigate if already on the home page
-                    break;
-                  case 1:
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return const Calender();
-                    }));
-                    break;
-                  case 2:
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return const Add();
-                    }));
-                    break;
-                  case 3:
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return const Settings();
-                    }));
-                    break;
-                  default:
-                    break;
-                }
-              });
-            },
-            currentIndex: index,
-            unselectedFontSize: 15,
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: const Color(0xFF295c82),
-            selectedLabelStyle: const TextStyle(fontSize: 13),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: "Home",
-                backgroundColor: Color.fromARGB(255, 230, 230, 230),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month),
-                label: "Calender",
-                backgroundColor: Color.fromARGB(255, 230, 230, 230),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: "Add",
-                backgroundColor: Color.fromARGB(255, 230, 230, 230),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: "Settings",
-                backgroundColor: Color.fromARGB(255, 230, 230, 230),
-              ),
-            ],
-          ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   onTap: (value) {
+          //     setState(() {
+          //       currentPage = value;
+          //       switch (currentPage) {
+          //         case 0:
+          //           // No need to navigate if already on the home page
+          //           break;
+          //         case 1:
+          //           Navigator.of(context)
+          //               .push(MaterialPageRoute(builder: (context) {
+          //             return const Calender();
+          //           }));
+          //           break;
+          //         case 2:
+          //           Navigator.of(context)
+          //               .push(MaterialPageRoute(builder: (context) {
+          //             return const Add();
+          //           }));
+          //           break;
+          //         case 3:
+          //           Navigator.of(context)
+          //               .push(MaterialPageRoute(builder: (context) {
+          //             return const Settings();
+          //           }));
+          //           break;
+          //         default:
+          //           break;
+          //       }
+          //     });
+          //   },
+          //   currentIndex: currentPage,
+          //   unselectedFontSize: 15,
+          //   unselectedItemColor: Colors.grey,
+          //   selectedItemColor: const Color(0xFF295c82),
+          //   selectedLabelStyle: const TextStyle(fontSize: 13),
+          //   items: const [
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: "Home",
+          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.calendar_month),
+          //       label: "Calender",
+          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.add),
+          //       label: "Add",
+          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.settings),
+          //       label: "Settings",
+          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
+          //     ),
+          //   ],
+          // ),
         );
       },
     );

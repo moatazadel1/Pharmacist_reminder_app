@@ -131,7 +131,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-getUserProfile() async {
+  Future<void> getUserProfile() async {
     try {
       emit(GetUserLoading());
       final response = await api.get(
@@ -142,8 +142,6 @@ getUserProfile() async {
       emit(GetUserFailure(errMessage: e.errModel.errorMessage));
     }
   }
-
-
 
   logOut() async {
     try {
@@ -260,41 +258,41 @@ getUserProfile() async {
     }
   }
 
-allData() async {
+  Future<void> allData() async {
     try {
       emit(AllProductsLoading());
-  final response = await api.get(
-    EndPoints.alldata,
-  );
-  emit(AllProductsSuccess(products: AllProductsModel.fromJson(response)));
-} on ServerException catch (e) {
-  emit(AllProductsFailure(errMessage: e.errModel.errorMessage));
-}
+      final response = await api.get(
+        EndPoints.alldata,
+      );
+      emit(AllProductsSuccess(products: AllProductsModel.fromJson(response)));
+    } on ServerException catch (e) {
+      emit(AllProductsFailure(errMessage: e.errModel.errorMessage));
+    }
   }
-  
-  
+
   expiredData() async {
     try {
       emit(ExpiredLoading());
-  final response = await api.get(
-    EndPoints.expire,
-  );
-  emit(ExpiredSuccess(exproducts: ExpiredProductModel.fromJson(response)));
-} on ServerException catch (e) {
-  emit(ExpiredFailure(errMessage: e.errModel.errorMessage));
-}
+      final response = await api.get(
+        EndPoints.expire,
+      );
+      emit(ExpiredSuccess(exproducts: ExpiredProductModel.fromJson(response)));
+    } on ServerException catch (e) {
+      emit(ExpiredFailure(errMessage: e.errModel.errorMessage));
+    }
   }
-  
-soonExpiredData() async {
+
+  soonExpiredData() async {
     try {
       emit(SoonExpiredLoading());
-  final response = await api.get(
-    EndPoints.soonexpire,
-  );
-  emit(SoonExpiredSuccess(soonexproducts: SoonExpiredProModel.fromJson(response)));
-} on ServerException catch (e) {
-  emit(SoonExpiredFailure(errMessage: e.errModel.errorMessage));
-}
+      final response = await api.get(
+        EndPoints.soonexpire,
+      );
+      emit(SoonExpiredSuccess(
+          soonexproducts: SoonExpiredProModel.fromJson(response)));
+    } on ServerException catch (e) {
+      emit(SoonExpiredFailure(errMessage: e.errModel.errorMessage));
+    }
   }
 
   showOne() async {
@@ -309,7 +307,6 @@ soonExpiredData() async {
       emit(ShowOneFailure(errMessage: e.errModel.errorMessage));
     }
   }
-
 
   updateItem() async {
     try {
@@ -342,17 +339,18 @@ soonExpiredData() async {
   }
 
   delete() async {
-  try {
-    emit(DeleteLoading());
-    // Retrieve the ID from the cache and convert it to an integer
-    final id = int.tryParse(await getIt<CacheHelper>().getData(key: ApiKey.id)) ?? 0;
-    final response = await api.delete(
-      EndPoints.delete(id.toString()), // Ensure the ID is converted back to String before passing it
-    );
-    emit(DeleteSuccess());
-  } on ServerException catch (e) {
-    emit(DeleteFailure(errMessage: e.errModel.errorMessage));
+    try {
+      emit(DeleteLoading());
+      // Retrieve the ID from the cache and convert it to an integer
+      final id =
+          int.tryParse(await getIt<CacheHelper>().getData(key: ApiKey.id)) ?? 0;
+      final response = await api.delete(
+        EndPoints.delete(id
+            .toString()), // Ensure the ID is converted back to String before passing it
+      );
+      emit(DeleteSuccess());
+    } on ServerException catch (e) {
+      emit(DeleteFailure(errMessage: e.errModel.errorMessage));
+    }
   }
-}
-
 }

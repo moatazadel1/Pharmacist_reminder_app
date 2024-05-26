@@ -14,13 +14,14 @@ final class UserInitial extends UserState {}
 
 //signIn
 final class SignInSuccess extends UserState {}
+
 final class SignInLoading extends UserState {}
+
 final class SignInFailure extends UserState {
   final String errmessage;
 
   SignInFailure({required this.errmessage});
 }
-
 
 //uploadImage
 final class UploadProfilePic extends UserState {}
@@ -34,38 +35,41 @@ final class SignUpSuccess extends UserState {
 
   SignUpSuccess({required this.message});
 }
+
 final class SignUpLoading extends UserState {}
+
 final class SignUpFailure extends UserState {
   final String errMessage;
 
   SignUpFailure({required this.errMessage});
 }
 
-
-
 //Profile=getuser
 final class GetUserSuccess extends UserState {
   final UserModel user;
+  // final AllProductsModel products;
 
   GetUserSuccess({required this.user});
 }
+
 final class GetUserLoading extends UserState {}
+
 final class GetUserFailure extends UserState {
   final String errMessage;
 
-  GetUserFailure({required this.errMessage });
+  GetUserFailure({required this.errMessage});
 }
-
 
 //LogOut
 final class LogOutSuccess extends UserState {}
+
 final class LogOutLoading extends UserState {}
+
 final class LogOutFailure extends UserState {
   final String errmessage;
 
   LogOutFailure({required this.errmessage});
 }
-
 
 //Forget Password
 final class ForgetPassSuccess extends UserState {
@@ -73,13 +77,14 @@ final class ForgetPassSuccess extends UserState {
 
   ForgetPassSuccess({required this.message});
 }
+
 final class ForgetPassLoading extends UserState {}
+
 final class ForgetPassFailure extends UserState {
   final String errMessage;
 
   ForgetPassFailure({required this.errMessage});
 }
-
 
 //Add Item
 final class AddItemSuccess extends UserState {
@@ -87,7 +92,9 @@ final class AddItemSuccess extends UserState {
 
   AddItemSuccess({required this.message});
 }
+
 final class AddItemLoading extends UserState {}
+
 final class AddItemFailure extends UserState {
   final String errMessage;
   AddItemFailure({required this.errMessage});
@@ -99,27 +106,29 @@ final class EditUserSuccess extends UserState {
 
   EditUserSuccess({required this.message});
 }
+
 final class EditUserLoading extends UserState {}
+
 final class EditUserFailure extends UserState {
   final String errMessage;
 
   EditUserFailure({required this.errMessage});
 }
 
-
 //update product
 final class UpdateSuccess extends UserState {
   final UpdateItemModel message;
 
-    UpdateSuccess({required this.message});
+  UpdateSuccess({required this.message});
 }
-  final class UpdateLoading extends UserState {}
-  final class UpdateFailure extends UserState {
-    final String errMessage;
+
+final class UpdateLoading extends UserState {}
+
+final class UpdateFailure extends UserState {
+  final String errMessage;
 
   UpdateFailure({required this.errMessage});
-  }
-
+}
 
 //showone product
 final class ShowOneSuccess extends UserState {
@@ -181,8 +190,6 @@ final class SoonExpiredFailure extends UserState {
   SoonExpiredFailure({required this.errMessage});
 }
 
-
-
 //delete product
 final class DeleteSuccess extends UserState {}
 
@@ -194,10 +201,11 @@ final class DeleteFailure extends UserState {
   DeleteFailure({required this.errMessage});
 }
 
-
 //check code
 final class CheckCodeSuccess extends UserState {}
+
 final class CheckCodeLoading extends UserState {}
+
 final class CheckCodeFailure extends UserState {
   final String errMessage;
 
@@ -208,9 +216,11 @@ final class CheckCodeFailure extends UserState {
 final class ResetPasswordSuccess extends UserState {
   final String message;
 
-    ResetPasswordSuccess({required this.message});
+  ResetPasswordSuccess({required this.message});
 }
+
 final class ResetPasswordLoading extends UserState {}
+
 final class ResetPasswordFailure extends UserState {
   final String errMessage;
   ResetPasswordFailure({required this.errMessage});
