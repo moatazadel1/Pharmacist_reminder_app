@@ -38,6 +38,10 @@ class CacheHelper {
     return sharedPreferences.get(key);
   }
 
+  // int? getDataInt({required int key}) {
+  //   return sharedPreferences.getInt(key.toInt());
+  // }
+
 //! remove data using specific key
 
   Future<bool> removeData({required String key}) async {
@@ -66,8 +70,10 @@ class CacheHelper {
       return await sharedPreferences.setInt(key, value);
     }
   }
+
 // Save JSON data
-  Future<bool> saveJsonData({required String key, required Map<String, dynamic> value}) async {
+  Future<bool> saveJsonData(
+      {required String key, required Map<String, dynamic> value}) async {
     return await sharedPreferences.setString(key, jsonEncode(value));
   }
 

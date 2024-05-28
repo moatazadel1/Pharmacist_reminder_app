@@ -17,15 +17,19 @@ class EndPoints {
   static String allcategory = "item/allcategory";
   static String expire = "item/expire";
   static String soonexpire = "item/soonexpire";
-  static String updatedata(id) {
-    return "updatedata/$id";
+  // static String updatedata(id) {
+  //   return "updatedata/$id";
+  // }
+
+  static String updatedata(int id) {
+    return "item/updatedata/$id";
   }
 
   static String showone(id) {
     return "item/showone/$id";
   }
 
-  static String delete(id) {
+  static String delete(int id) {
     return "item/delete/$id";
   }
 }

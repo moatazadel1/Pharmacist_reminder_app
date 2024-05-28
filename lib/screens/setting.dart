@@ -7,6 +7,7 @@ import 'package:reminder_app/screens/add_item.dart';
 import 'package:reminder_app/screens/calender.dart';
 import 'package:reminder_app/screens/homepage.dart';
 import 'package:reminder_app/screens/log_in.dart';
+import 'package:reminder_app/screens/notifications.dart';
 import 'package:reminder_app/screens/profile.dart';
 import 'package:reminder_app/screens/sign_up.dart';
 
@@ -43,6 +44,8 @@ class _SettingsState extends State<Settings> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
+
             backgroundColor: const Color.fromARGB(255, 244, 243, 243),
             title: const Text(
               "Settings",
@@ -52,7 +55,7 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             centerTitle: true,
-            leading: const BackButton(color: Color(0xFF295c82)),
+            // leading: const BackButton(color: Color(0xFF295c82)),
           ),
           body: ListView(
             children: [
@@ -85,18 +88,24 @@ class _SettingsState extends State<Settings> {
                         color: Colors.black, size: 20),
                   ),
                   const SizedBox(height: 1),
-                  const ListTile(
-                    title: Text(
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const NotificationsScreen();
+                      }));
+                    },
+                    title: const Text(
                       "Notifications",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.notifications,
                       color: Color(0xFF295c82),
                       size: 25,
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios,
+                    trailing: const Icon(Icons.arrow_forward_ios,
                         color: Colors.black, size: 20),
                   ),
                   const SizedBox(height: 1),

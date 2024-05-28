@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reminder_app/components/buttons.dart';
@@ -13,6 +12,7 @@ import 'package:reminder_app/widgets/pick_image3.dart';
 
 class Edit extends StatefulWidget {
   const Edit({super.key});
+  static String id = 'editScreen';
 
   @override
   State<Edit> createState() => _EditState();
@@ -51,6 +51,7 @@ class _EditState extends State<Edit> {
   File? _selectedImage;
   @override
   Widget build(BuildContext context) {
+    ModalRoute.of(context)!.settings.arguments;
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is UpdateSuccess) {
@@ -63,7 +64,7 @@ class _EditState extends State<Edit> {
           context.read<UserCubit>().getUserProfile();
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
-              return AllItems();
+              return const AllItems();
             }),
           );
         } else if (state is UpdateFailure) {
@@ -507,7 +508,7 @@ class _EditState extends State<Edit> {
                 Padding(
                   padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
                   child: state is UpdateLoading
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : CustomButton(
                           title: "Update",
                           onPressed: () {
@@ -528,7 +529,7 @@ class _EditState extends State<Edit> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 
@@ -537,7 +538,7 @@ class _EditState extends State<Edit> {
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 }

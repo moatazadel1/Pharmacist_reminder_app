@@ -1,16 +1,10 @@
-import 'dart:ffi';
-import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reminder_app/components/buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:reminder_app/components/textformfield.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
 import 'package:reminder_app/screens/all_items.dart';
-import 'package:reminder_app/screens/calender.dart';
-import 'package:reminder_app/screens/homepage.dart';
-import 'package:reminder_app/screens/setting.dart';
 import 'package:reminder_app/widgets/pick_image2.dart';
 import 'package:reminder_app/widgets/pick_image3.dart';
 
@@ -49,7 +43,28 @@ class _EditState extends State<Add> {
     }
   }
 
-  File? _selectedImage;
+  void _resetForm() {
+    context.read<UserCubit>().productName.clear();
+    context.read<UserCubit>().proDate.clear();
+    context.read<UserCubit>().expDate.clear();
+    context.read<UserCubit>().startReminder.clear();
+    context.read<UserCubit>().BatchNumber.clear();
+    context.read<UserCubit>().quantity.clear();
+    context.read<UserCubit>().description.clear();
+    context.read<UserCubit>().category.clear();
+
+    setState(() {
+      _ischecked = false;
+      _ischecked1 = false;
+      _ischecked2 = false;
+      _ischecked3 = false;
+      _ischecked4 = false;
+      _ischecked5 = false;
+    });
+
+    context.read<UserCubit>().resetProductPic();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
@@ -60,14 +75,14 @@ class _EditState extends State<Add> {
               content: Text("item added successfully"),
             ),
           );
+          _resetForm(); // Reset form after successful add
+
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
               return const AllItems();
             }),
           );
           context.read<UserCubit>().getUserProfile();
-
-          //context.read<UserCubit>().expiredData();
         } else if (state is AddItemFailure) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.errMessage)));
@@ -76,6 +91,7 @@ class _EditState extends State<Add> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: const Color.fromARGB(255, 244, 243, 243),
             title: const Text(
               "Add Item",
@@ -85,7 +101,7 @@ class _EditState extends State<Add> {
               ),
             ),
             centerTitle: true,
-            leading: const BackButton(color: Color(0xFF295c82)),
+            // leading: const BackButton(color: Color(0xFF295c82)),
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -511,6 +527,36 @@ class _EditState extends State<Add> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  // Future _pickImageFromGalary() async {
+  //   final returnedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (returnedImage == null) return;
+  //   setState(() {
+  //     _selectedImage = File(returnedImage!.path);
+  //   });
+  // }
+
+  // Future _pickImageFromCamera() async {
+  //   final returnedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.camera);
+  //   if (returnedImage == null) return;
+  //   setState(() {
+  //     _selectedImage = File(returnedImage!.path);
+  //   });
+  // }
+}
+
+
+  // Future<void> _refresh() {
+  //   return Future.delayed(const Duration(seconds: 0));
+  // }
+
+
           // bottomNavigationBar: BottomNavigationBar(
           //   onTap: (value) {
           //     setState(() {
@@ -562,26 +608,3 @@ class _EditState extends State<Add> {
           //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
           //   ],
           // ),
-        );
-      },
-    );
-  }
-
-  // Future _pickImageFromGalary() async {
-  //   final returnedImage =
-  //       await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (returnedImage == null) return;
-  //   setState(() {
-  //     _selectedImage = File(returnedImage!.path);
-  //   });
-  // }
-
-  // Future _pickImageFromCamera() async {
-  //   final returnedImage =
-  //       await ImagePicker().pickImage(source: ImageSource.camera);
-  //   if (returnedImage == null) return;
-  //   setState(() {
-  //     _selectedImage = File(returnedImage!.path);
-  //   });
-  // }
-}

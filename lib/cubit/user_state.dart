@@ -29,6 +29,8 @@ final class UploadProfilePic extends UserState {}
 //uploadImage
 final class UploadProductPic extends UserState {}
 
+final class UserImageReset extends UserState {}
+
 //signUp
 final class SignUpSuccess extends UserState {
   final String message;

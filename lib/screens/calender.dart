@@ -1,12 +1,8 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reminder_app/components/container.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
-import 'package:reminder_app/screens/add_item.dart';
-import 'package:reminder_app/screens/homepage.dart';
-import 'package:reminder_app/screens/setting.dart';
 
 class Calender extends StatefulWidget {
   const Calender({super.key});
@@ -20,14 +16,13 @@ class _CalenderState extends State<Calender> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             centerTitle: true,
-            leading: const BackButton(color: Color(0xFF295c82)),
+            // leading: const BackButton(color: Color(0xFF295c82)),
             title: const Text(
               "Calender",
             ),

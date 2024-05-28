@@ -4,6 +4,7 @@ import 'package:reminder_app/components/buttons.dart';
 import 'package:reminder_app/components/textformfield.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
+import 'package:reminder_app/root_screen.dart';
 import 'package:reminder_app/screens/homepage.dart';
 import 'package:reminder_app/screens/profile.dart';
 import 'package:reminder_app/screens/reset_password.dart';
@@ -25,18 +26,18 @@ class LogIn extends StatelessWidget {
       listener: (context, state) {
         if (state is SignInSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('success'),
             ),
           );
           context
               .read<UserCubit>()
               .getUserProfile(); //علشان يعرض الداتا في البروفايل قبل مايروح للصفحة الرئيسية
-              //context.read<UserCubit>().allData();
-              // context.read<UserCubit>().expiredData();
+          //context.read<UserCubit>().allData();
+          // context.read<UserCubit>().expiredData();
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) {
-              return HomePage();
+              return const RootScreen();
             }),
           );
         } else if (state is SignInFailure) {
@@ -49,13 +50,13 @@ class LogIn extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: BackButton(color: Color(0xFF295c82)),
+            leading: const BackButton(color: Color(0xFF295c82)),
           ),
           body: SingleChildScrollView(
             child: Form(
               key: signInFormKey,
               child: Column(children: [
-                Center(
+                const Center(
                   child: Image(
                     image: AssetImage("images/log_in.png"),
                     height: 250,
@@ -69,7 +70,7 @@ class LogIn extends StatelessWidget {
                     hinttext: 'Email',
                     controller: context.read<UserCubit>().signInEmail,
                     label: 'Email',
-                    myicon: Icon(Icons.mail, color: Color(0xFF295c82)),
+                    myicon: const Icon(Icons.mail, color: Color(0xFF295c82)),
                   ),
                 ),
 
@@ -83,7 +84,7 @@ class LogIn extends StatelessWidget {
                     isDense: true,
                     obscureText: true,
                     suffixIcon: true,
-                    myicon: Icon(Icons.lock, color: Color(0xFF295c82)),
+                    myicon: const Icon(Icons.lock, color: Color(0xFF295c82)),
                   ),
                 ),
 
@@ -94,7 +95,7 @@ class LogIn extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return ResetPassword();
+                        return const ResetPassword();
                       }));
                     },
                     child: const Text(
@@ -108,7 +109,7 @@ class LogIn extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(18),
                   child: state is SignInLoading
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : CustomButton(
                           title: "Login",
                           onPressed: () {
@@ -181,7 +182,7 @@ class LogIn extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't Have an Account?"),
+                    const Text("Don't Have an Account?"),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
@@ -192,7 +193,7 @@ class LogIn extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "SignUp",
                         style:
                             TextStyle(color: Color(0xFF295c82), fontSize: 15),

@@ -36,11 +36,18 @@ class _AllItemsState extends State<AllItems> {
     // ModalRoute.of(context)!.settings.arguments;
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
-        if (state is AddItemSuccess || state is DeleteSuccess) {
+        if (state is AddItemSuccess) {
           // Item added successfully, trigger a refresh to display the new item
-          BlocProvider.of<UserCubit>(context).showOne();
+          Navigator.pushReplacementNamed(context, AllItems.id,
+              arguments: BlocProvider.of<UserCubit>(context).allData());
+          // Navigator.pushReplacementNamed(context, RootScreen.id,
+          //     arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
 
           // context.read<UserCubit>().showOne();
+        }
+        if (state is DeleteSuccess) {
+          Navigator.pushReplacementNamed(context, RootScreen.id,
+              arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
         }
       },
       builder: (context, state) {
@@ -58,6 +65,12 @@ class _AllItemsState extends State<AllItems> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Color(0xFF295c82)),
               onPressed: () {
+                // Navigator.popAndPushNamed(
+                //     context,
+                //     arguments:
+                //         BlocProvider.of<UserCubit>(context).getUserProfile(),
+                //     RootScreen.id);
+
                 Navigator.pushReplacementNamed(context, RootScreen.id,
                     arguments:
                         BlocProvider.of<UserCubit>(context).getUserProfile());
