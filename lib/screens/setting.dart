@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reminder_app/cache/cache_helper.dart';
 import 'package:reminder_app/components/searchfield.dart';
+import 'package:reminder_app/core/api/end_points.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
-import 'package:reminder_app/screens/add_item.dart';
-import 'package:reminder_app/screens/calender.dart';
-import 'package:reminder_app/screens/homepage.dart';
 import 'package:reminder_app/screens/log_in.dart';
 import 'package:reminder_app/screens/notifications.dart';
 import 'package:reminder_app/screens/profile.dart';
-import 'package:reminder_app/screens/sign_up.dart';
+import 'package:reminder_app/service/service_Locator.dart';
+import 'package:reminder_app/widgets/startup.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -174,7 +174,18 @@ class _SettingsState extends State<Settings> {
                     padding: const EdgeInsets.only(right: 250, top: 20),
                     child: GestureDetector(
                       onTap: () {
-                        context.read<UserCubit>().logOut();
+                        getIt<CacheHelper>()
+                            .removeData(key: ApiKey.token)
+                            .then((_) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const StartUp()),
+                            (route) => false,
+                          );
+                        });
+
+                        // context.read<UserCubit>().logOut();
                       },
                       child: const Text(
                         "Log out",
@@ -189,57 +200,6 @@ class _SettingsState extends State<Settings> {
               ),
             ],
           ),
-          // bottomNavigationBar: BottomNavigationBar(
-          //   onTap: (value) {
-          //     setState(() {
-          //       index = value;
-          //       if (index == 0) {
-          //         Navigator.of(context)
-          //             .push(MaterialPageRoute(builder: (context) {
-          //           return const HomePage();
-          //         }));
-          //       } else if (index == 1) {
-          //         Navigator.of(context)
-          //             .push(MaterialPageRoute(builder: (context) {
-          //           return const Calender();
-          //         }));
-          //       } else if (index == 2) {
-          //         Navigator.of(context)
-          //             .push(MaterialPageRoute(builder: (context) {
-          //           return const Add();
-          //         }));
-          //       } else if (index == 3) {
-          //         Navigator.of(context)
-          //             .push(MaterialPageRoute(builder: (context) {
-          //           return const Settings();
-          //         }));
-          //       }
-          //     });
-          //   },
-          //   currentIndex: 3,
-          //   unselectedFontSize: 15,
-          //   unselectedItemColor: Colors.grey,
-          //   selectedItemColor: const Color(0xFF295c82),
-          //   selectedLabelStyle: const TextStyle(fontSize: 13),
-          //   items: const [
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.home),
-          //         label: "Home",
-          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.calendar_month),
-          //         label: "Calender",
-          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.add),
-          //         label: "Add",
-          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.settings),
-          //         label: "Settings",
-          //         backgroundColor: Color.fromARGB(255, 230, 230, 230)),
-          //   ],
-          // ),
         );
       },
     );

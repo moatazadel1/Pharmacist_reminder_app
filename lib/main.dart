@@ -22,17 +22,17 @@ void main() async {
   setupServiceLocator();
   await getIt<CacheHelper>().init();
 
-  Widget widget;
+  Widget startWidget;
   token = getIt<CacheHelper>().getData(key: ApiKey.token);
 
   if (token != null) {
-    widget = const RootScreen();
+    startWidget = const RootScreen();
   } else {
-    widget = const StartUp();
+    startWidget = const StartUp();
   }
   runApp(
     ReminderApp(
-      startWidget: widget,
+      startWidget: startWidget,
     ),
   );
 }
@@ -53,6 +53,7 @@ class ReminderApp extends StatelessWidget {
           Edit.id: (context) => const Edit(),
           Settings.id: (context) => const Settings(),
           AllItems.id: (context) => const AllItems(),
+          StartUp.id: (context) => const StartUp(),
         },
       ),
     );

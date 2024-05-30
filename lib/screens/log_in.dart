@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reminder_app/cache/cache_helper.dart';
 import 'package:reminder_app/components/buttons.dart';
 import 'package:reminder_app/components/textformfield.dart';
+import 'package:reminder_app/core/api/end_points.dart';
+import 'package:reminder_app/core/functions/constant.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
 import 'package:reminder_app/root_screen.dart';
-import 'package:reminder_app/screens/homepage.dart';
-import 'package:reminder_app/screens/profile.dart';
 import 'package:reminder_app/screens/reset_password.dart';
 import 'package:reminder_app/screens/sign_up.dart';
+import 'package:reminder_app/service/service_Locator.dart';
 
 class LogIn extends StatelessWidget {
   LogIn({super.key});
@@ -50,7 +52,7 @@ class LogIn extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: const BackButton(color: Color(0xFF295c82)),
+            automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
             child: Form(
@@ -114,6 +116,8 @@ class LogIn extends StatelessWidget {
                           title: "Login",
                           onPressed: () {
                             context.read<UserCubit>().signIn();
+                            getIt<CacheHelper>()
+                                .saveData(key: ApiKey.token, value: token);
                           },
                         ),
                 ),
