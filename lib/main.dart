@@ -8,8 +8,10 @@ import 'package:reminder_app/core/functions/constant.dart';
 import 'package:reminder_app/core/utils/notification/local_notification_service.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/root_screen.dart';
+import 'package:reminder_app/screens/all_items.dart';
 import 'package:reminder_app/screens/edit.dart';
 import 'package:reminder_app/screens/homepage.dart';
+import 'package:reminder_app/screens/setting.dart';
 import 'package:reminder_app/service/service_Locator.dart';
 import 'package:reminder_app/widgets/startup.dart';
 
@@ -42,9 +44,6 @@ class ReminderApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => UserCubit(DioConsumer(dio: Dio()))..getUserProfile(),
-      // ..allData()
-      // ..soonExpiredData()
-      // ..expiredData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: startWidget,
@@ -52,6 +51,8 @@ class ReminderApp extends StatelessWidget {
           HomePage.id: (context) => const HomePage(),
           RootScreen.id: (context) => const RootScreen(),
           Edit.id: (context) => const Edit(),
+          Settings.id: (context) => const Settings(),
+          AllItems.id: (context) => const AllItems(),
         },
       ),
     );

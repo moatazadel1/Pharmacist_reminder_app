@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/models/all_products_model.dart';
+import 'package:reminder_app/screens/all_items.dart';
 import 'package:reminder_app/screens/edit.dart';
 
 class CustomContainer extends StatelessWidget {
@@ -81,15 +82,23 @@ class CustomContainer extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 50),
                             child: GestureDetector(
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 24,
-                              ),
-                              onTap: () async {
-                                await context.read<UserCubit>().delete();
-                              },
-                            ),
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 24,
+                                ),
+                                onTap: () async {
+                                  Future.wait({
+                                    context.read<UserCubit>().delete(),
+                                  });
+                                  Navigator.pushNamed(
+                                    context,
+                                    AllItems.id,
+                                    arguments:
+                                        BlocProvider.of<UserCubit>(context)
+                                            .allData(),
+                                  );
+                                }),
                           ),
                         ],
                       ),

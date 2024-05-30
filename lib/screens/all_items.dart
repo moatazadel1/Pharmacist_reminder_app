@@ -5,10 +5,6 @@ import 'package:reminder_app/components/searchfield.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
 import 'package:reminder_app/root_screen.dart';
-import 'package:reminder_app/screens/add_item.dart';
-import 'package:reminder_app/screens/calender.dart';
-import 'package:reminder_app/screens/homepage.dart';
-import 'package:reminder_app/screens/setting.dart';
 
 class AllItems extends StatefulWidget {
   const AllItems({
@@ -42,12 +38,12 @@ class _AllItemsState extends State<AllItems> {
               arguments: BlocProvider.of<UserCubit>(context).allData());
           // Navigator.pushReplacementNamed(context, RootScreen.id,
           //     arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
-
           // context.read<UserCubit>().showOne();
         }
         if (state is DeleteSuccess) {
-          Navigator.pushReplacementNamed(context, RootScreen.id,
-              arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
+          // Navigator.pushReplacementNamed(context, RootScreen.id,
+          //     arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
+          const ScaffoldMessenger(child: Text('Record has been deleted'));
         }
       },
       builder: (context, state) {
@@ -78,7 +74,7 @@ class _AllItemsState extends State<AllItems> {
             ),
           ),
           body: state is AllProductsLoading
-              ? const CircularProgressIndicator()
+              ? const Center(child: CircularProgressIndicator())
               : state is AllProductsSuccess
                   ? CustomScrollView(
                       slivers: [
@@ -102,57 +98,6 @@ class _AllItemsState extends State<AllItems> {
                       ],
                     )
                   : Container(),
-          // bottomNavigationBar: BottomNavigationBar(
-          //   onTap: (value) {
-          //     setState(() {
-          //       index = value;
-          //       if (index == 0) {
-          //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          //           return HomePage();
-          //         }));
-          //       } else if (index == 1) {
-          //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          //           return Calender();
-          //         }));
-          //       } else if (index == 2) {
-          //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          //           return Add();
-          //         }));
-          //       } else if (index == 3) {
-          //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          //           return Settings();
-          //         }));
-          //       }
-          //     });
-          //   },
-          //   currentIndex: 0,
-          //   unselectedFontSize: 15,
-          //   unselectedItemColor: Colors.grey,
-          //   selectedItemColor: Color(0xFF295c82),
-          //   selectedLabelStyle: TextStyle(fontSize: 13),
-          //   items: [
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.home),
-          //       label: "Home",
-          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.calendar_month),
-          //       label: "Calendar",
-          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.add),
-          //       label: "Add",
-          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.settings),
-          //       label: "Settings",
-          //       backgroundColor: Color.fromARGB(255, 230, 230, 230),
-          //     ),
-          //   ],
-          // ),
         );
       },
     );

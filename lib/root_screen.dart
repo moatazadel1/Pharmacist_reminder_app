@@ -20,7 +20,6 @@ class _RootScreenState extends State<RootScreen> {
   late PageController controller;
   int currentPage = 0;
   bool _isLoading = true;
-  // List<Widget> destinations = [];
   List<Widget> widgets = [
     const HomePage(),
     const Calender(),
@@ -38,13 +37,7 @@ class _RootScreenState extends State<RootScreen> {
     try {
       Future.wait({
         BlocProvider.of<UserCubit>(context).getUserProfile(),
-        // BlocProvider.of<UserCubit>(context).allData(),
       });
-      // Future.wait({
-      //   cartProvider.fetchCart(),
-      //   wishlistProvider.fetchWishlist(),
-      //   ordersProvider.fetchOrder(),
-      // });
     } catch (e) {
       rethrow;
     } finally {
@@ -62,51 +55,8 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   bottomNavigationBar: BottomNavigationBar(
-    //     onTap: (index) {
-    //       setState(() {
-    //         currentTab = index;
-    //       });
-    //     },
-    //     currentIndex: currentTab,
-    //     items: const [
-    // BottomNavigationBarItem(
-    //   icon: Icon(Icons.home),
-    //   label: "Home",
-    //   backgroundColor: Color.fromARGB(255, 230, 230, 230),
-    // ),
-    // BottomNavigationBarItem(
-    //   icon: Icon(Icons.calendar_month),
-    //   label: "Calender",
-    //   backgroundColor: Color.fromARGB(255, 230, 230, 230),
-    // ),
-    // BottomNavigationBarItem(
-    //   icon: Icon(Icons.add),
-    //   label: "Add",
-    //   backgroundColor: Color.fromARGB(255, 230, 230, 230),
-    // ),
-    // BottomNavigationBarItem(
-    //   icon: Icon(Icons.settings),
-    //   label: "Settings",
-    //   backgroundColor: Color.fromARGB(255, 230, 230, 230),
-    // ),
-    //     ],
-    //   ),
-    //   body: IndexedStack(
-    //     index: currentTab,
-    //     children: const <Widget>[
-    //       HomePage(),
-    //       Calender(),
-    //       Add(),
-    //       Settings(),
-    //     ],
-    //   ),
-    // );
-
     return Scaffold(
       body: PageView(
-        // physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: widgets,
         onPageChanged: (value) {
@@ -145,7 +95,7 @@ class _RootScreenState extends State<RootScreen> {
               icon: Icon(Icons.add),
               label: "Add",
               selectedIcon: Icon(
-                IconlyBold.addUser,
+                IconlyBold.plus,
               ),
             ),
             NavigationDestination(

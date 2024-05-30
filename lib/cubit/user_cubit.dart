@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -18,6 +19,7 @@ import 'package:reminder_app/core/utils/notification/local_notification_service.
 import 'package:reminder_app/cubit/user_state.dart';
 import 'package:reminder_app/models/add_model.dart';
 import 'package:reminder_app/models/all_products_model.dart';
+import 'package:reminder_app/models/delete_product_model.dart';
 
 import 'package:reminder_app/models/edit_user_model.dart';
 import 'package:reminder_app/models/expired_model.dart';
@@ -273,6 +275,7 @@ class UserCubit extends Cubit<UserState> {
 
       // Schedule a notification
       scheduleNotificationForProduct(
+        id: product!.id,
         productName: productName.text,
         startReminder: startReminder.text,
         expDate: expDate.text,
@@ -335,9 +338,7 @@ class UserCubit extends Cubit<UserState> {
   updateItem() async {
     try {
       emit(UpdateLoading());
-      // Convert the XFile to a MultipartFile
       var imageFile = await uploadImageToAPI(productPic!);
-      // Create a FormData object for sending multipart/form-data
       var formData = FormData.fromMap({
         ApiKey.title: updateTitle.text,
         ApiKey.pro_date: updateProDate.text,
@@ -347,39 +348,79 @@ class UserCubit extends Cubit<UserState> {
         ApiKey.description: updateDescription.text,
         ApiKey.type: updateCategory.text,
         ApiKey.quantity: updateQuantity.text,
-        ApiKey.item_image:
-            imageFile, // Use the converted MultipartFile directly
+        ApiKey.item_image: imageFile,
       });
-      final id =
-          getIt<CacheHelper>().getData(key: ApiKey.id); // Get the ID from cache
+      final id = getIt<CacheHelper>().getData(key: ApiKey.id);
 
-      log(id.toString());
       final response = await api.post(
         EndPoints.updatedata(id),
         data: formData,
       );
+
+      // Update the notification
+      updateNotificationForProduct(
+        id: id.toString(),
+        productName: updateTitle.text,
+        startReminder: updateStartReminder.text,
+        expDate: updateExpDate.text,
+      );
+
       emit(UpdateSuccess(message: UpdateItemModel.fromJson(response)));
     } on ServerException catch (e) {
       emit(UpdateFailure(errMessage: e.errModel.errorMessage));
     }
   }
 
-  delete() async {
+  void updateNotificationForProduct({
+    required String id,
+    required String productName,
+    required String startReminder,
+    required String expDate,
+  }) async {
+    // Cancel the old notification
+    await LocalNotificationService.cancelNotification(int.parse(id));
+
+    // Schedule the new notification
+    scheduleNotificationForProduct(
+      id: int.parse(id),
+      productName: productName,
+      startReminder: startReminder,
+      expDate: expDate,
+    );
+
+    // Update notification data
+    NotificationModel updatedNotification = NotificationModel(
+      id: int.parse(id),
+      title: 'Product Expiry Reminder',
+      body:
+          'The product "$productName" will soon be about to expire on $expDate.',
+      scheduledDate: DateFormat('yyyy-MM-dd')
+          .format(DateFormat('yyyy-MM-dd').parse(startReminder)),
+    );
+    await saveNotificationData(updatedNotification);
+  }
+
+  Future<void> delete() async {
     try {
       emit(DeleteLoading());
 
-      // Retrieve the ID from the cache
       final id = getIt<CacheHelper>().getData(key: ApiKey.id);
 
-      // Check if the ID is null
       if (id == null) {
         throw Exception("ID not found in cache");
       }
 
-      // Make the delete request
-      await api.delete(
-        EndPoints.delete(id),
-      );
+      await api.delete(EndPoints.delete(id));
+
+      // Cancel the scheduled notification
+      await LocalNotificationService.cancelNotification(int.parse(id));
+
+      // Remove the notification data
+      await removeNotificationById(id);
+
+      // Notify the NotificationsScreen about the deletion
+
+      NotificationStream.instance.notify();
 
       emit(DeleteSuccess());
     } on ServerException catch (e) {
@@ -389,96 +430,15 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  // updateItem() async {
-  //   try {
-  //     emit(UpdateLoading());
-
-  //     // Convert the XFile to a MultipartFile
-  //     var imageFile = await uploadImageToAPI(productPic!);
-
-  //     // Create a FormData object for sending multipart/form-data
-  //     var formData = FormData.fromMap({
-  //       ApiKey.title: updateTitle.text,
-  //       ApiKey.pro_date: updateProDate.text,
-  //       ApiKey.exp_date: updateExpDate.text,
-  //       ApiKey.start_reminder: updateStartReminder.text,
-  //       ApiKey.code: updateCode.text,
-  //       ApiKey.description: updateDescription.text,
-  //       ApiKey.type: updateCategory.text,
-  //       ApiKey.quantity: updateQuantity.text,
-  //       ApiKey.item_image:
-  //           imageFile, // Use the converted MultipartFile directly
-  //     });
-
-  //     // final id = await getIt<CacheHelper>()
-  //     //     .getData(key: ApiKey.id); // Get the ID from cache
-
-  //     final id = getIt<CacheHelper>().getData(key: ApiKey.id);
-  //     if (id == null) {
-  //       throw Exception("ID not found in cache");
-  //     }
-
-  //     log('Updating item with ID: $id');
-
-  //     final response = await api.post(
-  //       EndPoints.updatedata(id),
-  //       data: formData,
-  //       queryParameters: {'id': id}, // Add query parameters here
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       log('Response data: ${response.data}');
-  //       emit(UpdateSuccess(message: UpdateItemModel.fromJson(response.data)));
-  //     } else {
-  //       log('Unexpected response status: ${response.statusCode}');
-  //       emit(UpdateFailure(
-  //           errMessage: 'Unexpected error occurred: ${response.statusCode}'));
-  //     }
-  //   } on DioException catch (e) {
-  //     log('DioException: ${e.message}');
-  //     if (e.response != null) {
-  //       log('Response data: ${e.response!.data}');
-  //       log('Response status code: ${e.response!.statusCode}');
-  //       if (e.response!.statusCode == 404) {
-  //         emit(UpdateFailure(errMessage: 'Item not found'));
-  //       } else {
-  //         emit(UpdateFailure(
-  //             errMessage:
-  //                 'Unexpected error occurred: ${e.response!.statusCode}'));
-  //       }
-  //     } else {
-  //       emit(UpdateFailure(errMessage: 'Failed to connect to the server'));
-  //     }
-  //   } catch (e) {
-  //     log('Unhandled Exception: $e');
-  //     emit(UpdateFailure(errMessage: 'An unknown error occurred'));
-  //   }
-  // }
-
-  // delete() async {
-  //   try {
-  //     emit(DeleteLoading());
-  //     // Retrieve the ID from the cache and convert it to an integer
-  //     final id = getIt<CacheHelper>().getData(key: ApiKey.id);
-  //     // final id =
-  //     //     int.tryParse(await getIt<CacheHelper>().getData(key: ApiKey.id)) ?? 0;
-  //     await api.delete(
-  //       EndPoints.delete(
-  //           id), // Ensure the ID is converted back to String before passing it
-  //     );
-  //     emit(DeleteSuccess());
-  //   } on ServerException catch (e) {
-  //     emit(DeleteFailure(errMessage: e.errModel.errorMessage));
-  //   }
-  // }
   void scheduleNotificationForProduct({
+    required int id,
     required String productName,
     required String startReminder,
     required String expDate,
   }) async {
     const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'schduled notification',
-      'id 0',
+      'scheduled_notification',
+      'id_0',
       importance: Importance.max,
       priority: Priority.high,
     );
@@ -497,20 +457,20 @@ class UserCubit extends Cubit<UserState> {
 
     await LocalNotificationService.flutterLocalNotificationsPlugin
         .zonedSchedule(
-      0,
+      id, // Use the id here
       'Product Expiry Reminder',
       'The product "$productName" will soon be about to expire on $expDate.',
       scheduledDate,
       details,
-      // details,
       payload: 'zonedSchedule',
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
     log(scheduledDate.toString());
+
     // Save notification data
     NotificationModel notification = NotificationModel(
-      id: 0,
+      id: id, // Use the id here
       title: 'Product Expiry Reminder',
       body:
           'The product "$productName" will soon be about to expire on $expDate.',
@@ -522,7 +482,53 @@ class UserCubit extends Cubit<UserState> {
   Future<void> saveNotificationData(NotificationModel notification) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> notifications = prefs.getStringList('notifications') ?? [];
+
+    // Remove old notification with the same ID if exists
+    notifications.removeWhere((notificationString) {
+      final existingNotification =
+          NotificationModel.fromMap(json.decode(notificationString));
+      return existingNotification.id == notification.id;
+    });
+
     notifications.add(json.encode(notification.toMap()));
     await prefs.setStringList('notifications', notifications);
   }
+
+  Future<void> removeNotificationById(int productId) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> notificationStrings =
+        prefs.getStringList('notifications') ?? [];
+
+    notificationStrings.removeWhere((notificationString) {
+      final notification =
+          NotificationModel.fromMap(json.decode(notificationString));
+      return notification.id ==
+          productId; // Directly compare with int productId
+    });
+
+    await prefs.setStringList('notifications', notificationStrings);
+  }
+}
+
+class NotificationStream {
+  static final NotificationStream _instance = NotificationStream._internal();
+  final StreamController<void> _controller = StreamController.broadcast();
+
+  factory NotificationStream() {
+    return _instance;
+  }
+
+  NotificationStream._internal();
+
+  Stream<void> get stream => _controller.stream;
+
+  void notify() {
+    _controller.add(null);
+  }
+
+  void dispose() {
+    _controller.close();
+  }
+
+  static NotificationStream get instance => _instance;
 }

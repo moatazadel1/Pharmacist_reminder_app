@@ -13,6 +13,7 @@ import 'package:reminder_app/screens/sign_up.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
+  static String id = 'settingsScreen';
 
   @override
   State<Settings> createState() => _SettingsState();

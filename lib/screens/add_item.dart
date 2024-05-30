@@ -52,6 +52,7 @@ class _EditState extends State<Add> {
     context.read<UserCubit>().quantity.clear();
     context.read<UserCubit>().description.clear();
     context.read<UserCubit>().category.clear();
+    context.read<UserCubit>().productPic = null;
 
     setState(() {
       _ischecked = false;

@@ -26,22 +26,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
-  // late PageController controller;
-  // int currentPage = 0;
-  // bool _isLoading = true;
-  // // List<Widget> destinations = [];
-  // List<Widget> widgets = [
-  //   const HomePage(),
-  //   const Calender(),
-  //   const Add(),
-  //   const Settings(),
-  // ];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller = PageController(initialPage: currentPage);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserCubit>(context).getUserProfile();
+  }
 
   // Future<void> fetchFCT() async {
   //   try {
