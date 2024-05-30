@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:reminder_app/components/textformfield.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/cubit/user_state.dart';
+import 'package:reminder_app/models/all_products_model.dart';
 import 'package:reminder_app/screens/all_items.dart';
 import 'package:reminder_app/widgets/pick_image2.dart';
 import 'package:reminder_app/widgets/pick_image3.dart';
@@ -51,7 +52,10 @@ class _EditState extends State<Edit> {
   File? _selectedImage;
   @override
   Widget build(BuildContext context) {
-    ModalRoute.of(context)!.settings.arguments;
+    // ModalRoute.of(context)!.settings.arguments;
+    final product = ModalRoute.of(context)!.settings.arguments as ProductModel;
+    final itemId = product.id;
+
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is UpdateSuccess) {
@@ -512,7 +516,7 @@ class _EditState extends State<Edit> {
                       : CustomButton(
                           title: "Update",
                           onPressed: () {
-                            context.read<UserCubit>().updateItem();
+                            context.read<UserCubit>().updateItem(itemId);
                           },
                         ),
                 ),

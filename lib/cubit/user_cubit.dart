@@ -335,7 +335,42 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  updateItem() async {
+  // updateItem() async {
+  //   try {
+  //     emit(UpdateLoading());
+  //     var imageFile = await uploadImageToAPI(productPic!);
+  //     var formData = FormData.fromMap({
+  //       ApiKey.title: updateTitle.text,
+  //       ApiKey.pro_date: updateProDate.text,
+  //       ApiKey.exp_date: updateExpDate.text,
+  //       ApiKey.start_reminder: updateStartReminder.text,
+  //       ApiKey.code: updateCode.text,
+  //       ApiKey.description: updateDescription.text,
+  //       ApiKey.type: updateCategory.text,
+  //       ApiKey.quantity: updateQuantity.text,
+  //       ApiKey.item_image: imageFile,
+  //     });
+  //     final id = getIt<CacheHelper>().getData(key: ApiKey.id);
+
+  //     final response = await api.post(
+  //       EndPoints.updatedata(id),
+  //       data: formData,
+  //     );
+
+  //     // Update the notification
+  //     updateNotificationForProduct(
+  //       id: id.toString(),
+  //       productName: updateTitle.text,
+  //       startReminder: updateStartReminder.text,
+  //       expDate: updateExpDate.text,
+  //     );
+
+  //     emit(UpdateSuccess(message: UpdateItemModel.fromJson(response)));
+  //   } on ServerException catch (e) {
+  //     emit(UpdateFailure(errMessage: e.errModel.errorMessage));
+  //   }
+  // }
+  Future<void> updateItem(int id) async {
     try {
       emit(UpdateLoading());
       var imageFile = await uploadImageToAPI(productPic!);
@@ -350,7 +385,6 @@ class UserCubit extends Cubit<UserState> {
         ApiKey.quantity: updateQuantity.text,
         ApiKey.item_image: imageFile,
       });
-      final id = getIt<CacheHelper>().getData(key: ApiKey.id);
 
       final response = await api.post(
         EndPoints.updatedata(id),
@@ -400,26 +434,19 @@ class UserCubit extends Cubit<UserState> {
     await saveNotificationData(updatedNotification);
   }
 
-  Future<void> delete() async {
+  Future<void> delete(int id) async {
     try {
       emit(DeleteLoading());
-
-      final id = getIt<CacheHelper>().getData(key: ApiKey.id);
-
-      if (id == null) {
-        throw Exception("ID not found in cache");
-      }
 
       await api.delete(EndPoints.delete(id));
 
       // Cancel the scheduled notification
-      await LocalNotificationService.cancelNotification(int.parse(id));
+      await LocalNotificationService.cancelNotification(id);
 
       // Remove the notification data
       await removeNotificationById(id);
 
       // Notify the NotificationsScreen about the deletion
-
       NotificationStream.instance.notify();
 
       emit(DeleteSuccess());

@@ -36,14 +36,17 @@ class _AllItemsState extends State<AllItems> {
           // Item added successfully, trigger a refresh to display the new item
           Navigator.pushReplacementNamed(context, AllItems.id,
               arguments: BlocProvider.of<UserCubit>(context).allData());
-          // Navigator.pushReplacementNamed(context, RootScreen.id,
-          //     arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
-          // context.read<UserCubit>().showOne();
         }
         if (state is DeleteSuccess) {
           // Navigator.pushReplacementNamed(context, RootScreen.id,
           //     arguments: BlocProvider.of<UserCubit>(context).getUserProfile());
-          const ScaffoldMessenger(child: Text('Record has been deleted'));
+          // const ScaffoldMessenger(child: Text('Record has been deleted'));
+          BlocProvider.of<UserCubit>(context).allData();
+        }
+        if (state is DeleteFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errMessage)),
+          );
         }
       },
       builder: (context, state) {
@@ -61,12 +64,6 @@ class _AllItemsState extends State<AllItems> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Color(0xFF295c82)),
               onPressed: () {
-                // Navigator.popAndPushNamed(
-                //     context,
-                //     arguments:
-                //         BlocProvider.of<UserCubit>(context).getUserProfile(),
-                //     RootScreen.id);
-
                 Navigator.pushReplacementNamed(context, RootScreen.id,
                     arguments:
                         BlocProvider.of<UserCubit>(context).getUserProfile());

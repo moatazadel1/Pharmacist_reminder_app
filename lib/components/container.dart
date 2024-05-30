@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reminder_app/cubit/user_cubit.dart';
 import 'package:reminder_app/models/all_products_model.dart';
-import 'package:reminder_app/screens/all_items.dart';
 import 'package:reminder_app/screens/edit.dart';
 
 class CustomContainer extends StatelessWidget {
@@ -70,13 +69,6 @@ class CustomContainer extends StatelessWidget {
                             onTap: () {
                               Navigator.pushNamed(context, Edit.id,
                                   arguments: product);
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) {
-                              //       return const Edit();
-                              //     },
-                              //   ),
-                              // );
                             },
                           ),
                           Padding(
@@ -87,17 +79,8 @@ class CustomContainer extends StatelessWidget {
                                   color: Colors.red,
                                   size: 24,
                                 ),
-                                onTap: () async {
-                                  Future.wait({
-                                    context.read<UserCubit>().delete(),
-                                  });
-                                  Navigator.pushNamed(
-                                    context,
-                                    AllItems.id,
-                                    arguments:
-                                        BlocProvider.of<UserCubit>(context)
-                                            .allData(),
-                                  );
+                                onTap: () {
+                                  context.read<UserCubit>().delete(product.id);
                                 }),
                           ),
                         ],

@@ -56,8 +56,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is AddItemSuccess) {}
-      if (state is DeleteSuccess) {}
+      // if (state is AddItemSuccess) {}
+      // if (state is DeleteSuccess) {}
     }, builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
